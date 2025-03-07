@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net"
@@ -25,7 +26,20 @@ func handler(w http.ResponseWriter, _ *http.Request) {
 	fmt.Fprintf(w, "Hi there! I'm from ip: %s", getOutboundIP())
 }
 
+func parseFlags() string {
+	serverPort := flag.String("serverPort", "8080", "Server port")
+	flag.Parse()
+	return *serverPort
+}
+
 func main() {
+	serverPort := parseFlags()
+
 	http.HandleFunc("/", handler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+
+	err := http.ListenAndServe(":"+serverPort, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("Server started on port " + serverPort)
 }
