@@ -1,5 +1,6 @@
 .idea/
 elb-asg-sample.iml
+out/
 
 terraform/.terraform
 terraform/.terraform.lock.hcl
