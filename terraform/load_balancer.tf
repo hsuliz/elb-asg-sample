@@ -3,13 +3,13 @@ resource "aws_lb" "this" {
   tags = {
     name : "elb-asg-sample"
   }
+
   internal           = false
   load_balancer_type = "application"
   ip_address_type    = "ipv4"
   subnets            = data.aws_subnets.this.ids
-  security_groups    = [aws_security_group.load_balancer.id]
+  security_groups = [aws_security_group.load_balancer.id]
 }
-
 
 resource "aws_lb_listener" "this" {
   load_balancer_arn = aws_lb.this.arn
