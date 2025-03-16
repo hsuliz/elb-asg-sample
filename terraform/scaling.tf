@@ -1,14 +1,15 @@
 resource "aws_autoscaling_group" "this" {
-  name_prefix = "myserver"
+  name = "autoscaling-group-sample"
   tag {
     key                 = "name"
     value               = "elb-asg-sample"
     propagate_at_launch = true
   }
 
-  min_size         = var.min_size
-  max_size         = var.max_size
-  desired_capacity = var.min_size
+  desired_capacity  = var.min_size
+  min_size          = var.min_size
+  max_size          = var.max_size
+  health_check_type = "ELB"
 
   vpc_zone_identifier = data.aws_subnets.this.ids
   target_group_arns = [
@@ -22,7 +23,7 @@ resource "aws_autoscaling_group" "this" {
 }
 
 resource "aws_launch_template" "this" {
-  name_prefix = "elb-asg-sample"
+  name = "elb-asg-sample"
   tags = {
     name : "elb-asg-sample"
   }
@@ -32,5 +33,5 @@ resource "aws_launch_template" "this" {
   key_name      = var.ssh_key_name
 
   vpc_security_group_ids = [aws_security_group.launch_template.id]
-  user_data = filebase64("${path.module}/user_data.sh")
+  user_data              = filebase64("${path.module}/user_data.sh")
 }

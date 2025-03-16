@@ -8,7 +8,7 @@ resource "aws_lb" "this" {
   load_balancer_type = "application"
   ip_address_type    = "ipv4"
   subnets            = data.aws_subnets.this.ids
-  security_groups = [aws_security_group.load_balancer.id]
+  security_groups    = [aws_security_group.load_balancer.id]
 }
 
 resource "aws_lb_listener" "this" {
@@ -27,7 +27,7 @@ resource "aws_lb_listener" "this" {
 }
 
 resource "aws_lb_target_group" "this" {
-  name = "target-group-sample"
+  name_prefix = "lb-smp"
   tags = {
     name : "elb-asg-sample"
   }
@@ -35,4 +35,8 @@ resource "aws_lb_target_group" "this" {
   protocol = "HTTP"
   port     = 80
   vpc_id   = data.aws_vpc.this.id
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
