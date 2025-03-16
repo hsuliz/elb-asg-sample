@@ -7,7 +7,7 @@ variable "min_size" {
 variable "max_size" {
   description = "Max quantity of VM"
   type        = number
-  default     = 1
+  default     = 2
 }
 
 variable "instance_type" {
