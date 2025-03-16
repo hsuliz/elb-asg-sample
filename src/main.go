@@ -3,8 +3,12 @@ package main
 import (
 	"flag"
 	"github.com/gin-gonic/gin"
+	"log"
+	"myserver/handlers"
 	"myserver/routes"
 )
+
+var Version string
 
 func parseFlags() string {
 	serverPort := flag.String("serverPort", "8080", "Server port")
@@ -14,9 +18,10 @@ func parseFlags() string {
 
 func main() {
 	serverPort := parseFlags()
+
+	handlers.Version = Version
+
 	router := gin.Default()
-
 	routes.RegisterRoutes(router)
-
-	router.Run(":" + serverPort)
+	log.Fatalln(router.Run(":" + serverPort))
 }

@@ -3,19 +3,17 @@ package handlers
 import (
 	"github.com/gin-gonic/gin"
 	"log"
-	"myserver/dto"
 	"myserver/utils"
 	"net/http"
 )
 
-func GetOutboundIP(c *gin.Context) {
-	log.Println("[GetOutboundIP] got request from " + c.ClientIP())
-	c.JSON(http.StatusOK, gin.H{"outbound-ip": utils.GetOutboundIP()})
+type PostHighLoadRequest struct {
+	Power int `json:"power" binding:"required,min=1"`
 }
 
 func PostHighLoad(c *gin.Context) {
 	log.Println("[PostHighLoad] got request from " + c.ClientIP())
-	var body dto.PostHighLoadRequest
+	var body PostHighLoadRequest
 
 	err := c.ShouldBindJSON(&body)
 	if err != nil {
@@ -30,5 +28,5 @@ func PostHighLoad(c *gin.Context) {
 		return
 	}
 
-	utils.HighLoad(body.Power, body.NumberOfCPU)
+	utils.HighLoad(body.Power)
 }

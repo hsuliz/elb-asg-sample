@@ -6,6 +6,6 @@ import (
 )
 
 func RegisterRoutes(router *gin.Engine) {
-	router.GET("/outbound-ip", handlers.GetOutboundIP)
+	router.GET("/", handlers.GetInfo)
 	router.POST("/high-load", handlers.PostHighLoad)
 }
