@@ -1,10 +1,13 @@
 FROM golang:1.23 AS builder
 WORKDIR /build
 
-COPY src .
-RUN go build -v -o myserver
+COPY src/go.mod src/go.sum ./
+RUN go mod download
 
-FROM gcr.io/distroless/base-debian12
+COPY src ./
+RUN CGO_ENABLED=0 go build -ldflags="-X 'main.Version=1.2.3'" -v -o myserver
+
+FROM gcr.io/distroless/static-debian12:latest
 EXPOSE 8080
 WORKDIR /app
 
