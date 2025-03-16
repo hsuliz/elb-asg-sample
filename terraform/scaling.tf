@@ -33,5 +33,28 @@ resource "aws_launch_template" "this" {
   key_name      = var.ssh_key_name
 
   vpc_security_group_ids = [aws_security_group.launch_template.id]
-  user_data              = filebase64("${path.module}/user_data.sh")
+  user_data = filebase64("${path.module}/user_data.sh")
 }
+
+resource "aws_autoscaling_policy" "dynamic_scaling_policy" {
+  name                   = "dynamic-scaling-policy-sample"
+  policy_type            = "TargetTrackingScaling"
+  autoscaling_group_name = aws_autoscaling_group.this.name
+
+  estimated_instance_warmup = 70
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+    target_value = 60.0
+  }
+}
+
+resource "aws_autoscaling_lifecycle_hook" "keep_alive" {
+  name                   = "keep-alive-hook-sample"
+  autoscaling_group_name = aws_autoscaling_group.this.name
+  lifecycle_transition   = "autoscaling:EC2_INSTANCE_TERMINATING"
+  heartbeat_timeout      = 300
+  default_result         = "CONTINUE"
+}
+
