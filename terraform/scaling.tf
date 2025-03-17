@@ -36,7 +36,7 @@ resource "aws_launch_template" "this" {
   user_data = filebase64("${path.module}/user_data.sh")
 }
 
-resource "aws_autoscaling_policy" "dynamic_scaling_policy" {
+resource "aws_autoscaling_policy" "this" {
   name                   = "dynamic-scaling-policy-sample"
   policy_type            = "TargetTrackingScaling"
   autoscaling_group_name = aws_autoscaling_group.this.name
@@ -50,7 +50,7 @@ resource "aws_autoscaling_policy" "dynamic_scaling_policy" {
   }
 }
 
-resource "aws_autoscaling_lifecycle_hook" "keep_alive" {
+resource "aws_autoscaling_lifecycle_hook" "this" {
   name                   = "keep-alive-hook-sample"
   autoscaling_group_name = aws_autoscaling_group.this.name
   lifecycle_transition   = "autoscaling:EC2_INSTANCE_TERMINATING"
