@@ -57,4 +57,3 @@ resource "aws_autoscaling_lifecycle_hook" "keep_alive" {
   heartbeat_timeout      = 300
   default_result         = "CONTINUE"
 }
-
